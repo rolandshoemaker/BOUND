@@ -1,0 +1,1 @@
+bind_zone_confs = ['test.conf.local']
