@@ -58,6 +58,7 @@ class PickledRedis(StrictRedis):
         return super(PickledRedis, self).set(name, pickle.dumps(value), ex, px, nx, xx)
 
 predis = PickledRedis()
+
 ####################
 # Front end routes #
 ####################
