@@ -9,9 +9,10 @@ import dns.zone
 
 app = Flask(__name__)
 
-def get_local_zones(confFiles, unsaved):
-	"""Return list of tuples containing zone name and dnspython zone object for domains, reverses, and slaves."""
-	for configFile in configFiles:
+def get_local_zones(confFiles):
+	"""Return list of triplets containing zone name, dnspython zone object, and whether zone has changed for domains, reverses, and slaves."""
+	unsaved = bool()
+	for confFile in confFiles:
 		with open(confFile) as input_config_file:
 			conf_string = input_config_file.read()
 		zones = iscpy.ParseISCString(conf_string)
@@ -20,14 +21,16 @@ def get_local_zones(confFiles, unsaved):
 			if zone_name.startswith('zone '):
 				zone_name = zone_name[6:-1].lower()
 				if zone_obj.get('file', None) and zone_obj.get('type', None):
-					if unsaved:
-						# check if zone name is in redis for user if so add it to real_zones instead, if not do as normal
-					else:
-						real_zones.append([zone_name, dns.zone.from_file(zone_obj['file'][1:-1]), zone_obj['type']])
-	slaves = [[z[0], z[1], real_zones.pop(z)][0:2] for z in real_zones if z[2].lower() == 'slave']
-	reverses = [[z[0], z[1], real_zones.pop(z)][0:2] for z in real_zones if z[0].lower().endswith('in-addr.arpa')]
+					zone_changed = bool()
+					# check if zone name is in redis for user if so add it to real_zones instead, if not do as normal
+					#try:
+					real_zones.append([zone_name, dns.zone.from_file(zone_obj['file'][1:-1], zone_name), zone_obj['type'], zone_changed])
+					#except:
+					#	pass
+	slaves = [[z[0], z[1], real_zones.pop(real_zones.index(z))][0:2] for z in real_zones if z[2].lower() == 'slave']
+	reverses = [[z[0], z[1], real_zones.pop(real_zones.index(z))][0:2] for z in real_zones if z[0].lower().endswith('in-addr.arpa')]
 	domains = [[z[0], z[1]] for z in real_zones[:]] # just the rest...?
-	return domains, reverses, slaves
+	return domains, reverses, slaves, unsaved
 
 # # Redis cache for storing changed zones until saved.
 # class PickledRedis(StrictRedis):
@@ -42,8 +45,7 @@ def get_local_zones(confFiles, unsaved):
 
 @app.route('/')
 def index():
-	unsaved = bool # stuff in cache for person?
-	domains, reverses, slaves = get_local_zones(config.bind_zone_confs, unsaved)
+	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
 	notifications = [] # from logs?
 	return render_template('index.html', domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications)
 
