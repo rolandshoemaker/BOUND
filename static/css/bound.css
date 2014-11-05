@@ -1,0 +1,89 @@
+td.type {
+	text-align: center;
+	font-weight: bold;
+}
+
+th.type, th.actions, th.ttl, td.actions, td.ttl {
+	text-align: center;
+}
+
+
+td#SOA {
+	background-color: #FF9F55;
+}
+
+td#NS {
+	background-color: #5A88E2;
+}
+
+td#A {
+	background-color: #4ADED3;
+}
+
+td#AAAA {
+	background-color: #26a69d;
+}
+
+td#CNAME {
+	background-color: #e7e488;
+}
+
+td#MX {
+	background-color: #CF4536;
+}
+
+td#TXT {
+	background-color: #923E7D;
+}
+
+td#AFSDB {
+	background-color: #b778a7;
+}
+
+td#HINFO {
+	background-color: #9398eb;
+}
+
+td#RP {
+	background-color: #93eb9e;
+}
+
+td#LOC {
+	background-color: #d0baa6;
+}
+
+td#NAPTR {
+	background-color: #b3b9f8;
+}
+
+td#PTR {
+	background-color: #86cdc6;
+}
+
+td#SSHFP {
+	background-color: #85cd74;
+}
+
+td#SPF {
+	background-color: #76BA31;
+}
+
+td#SRV {
+	background-color: #e2787f;
+}
+
+i.bind-up {
+	color: green;
+}
+
+i.bind-down {
+	color: red;
+}
+
+i.bind-unknown {
+	color: grey;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+	border: none !important;
+}
