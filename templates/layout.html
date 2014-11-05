@@ -67,66 +67,7 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <!-- /.dropdown -->
-                <li><a href="/logs"><i class="fa fa-arrow-circle-up bind-up"></i><!--<i class="fa fa-arrow-circle-down bind-down"><i class="fa fa-question-circle bind-unknown"></i>--></i></a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-comment fa-fw"></i> New Comment
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
-                                    <span class="pull-right text-muted small">12 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#">
-                                <div>
-                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
-                                    <span class="pull-right text-muted small">4 minutes ago</span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a class="text-center" href="#">
-                                <strong>See All Alerts</strong>
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-alerts -->
-                </li>
+                <li class="bind-status"><a><i class="fa fa-question-circle bind-unknown" title="BIND status unknown"></i></a></li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -156,7 +97,7 @@
                                 <li>
                                     <a href="#">Domains <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_domain">Add Domain</a></li>
+                                    <li><a href="/new_domain"><i class="fa fa-plus fa-fw"></i> Add Domain</a></li>
                                     {% for d in domains %}
                                         <li><a href="/domain/{{d[0]}}">{{d[0]}}</a></li>
                                     {% endfor %}
@@ -166,7 +107,7 @@
                                 <li>
                                     <a href="#">Slaves <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_slave">Add Slave</a></li>
+                                    <li><a href="/new_slave"><i class="fa fa-plus fa-fw"></i> Add Slave</a></li>
                                     {% for d in slaves %}
                                         <li><a href="/slave/{{d[0]}}">{{ d[0] }}</a></li>
                                     {% endfor %}
@@ -176,7 +117,8 @@
                                 <li>
                                     <a href="#">Reverses <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_reverse">Add Reverse</a></li>
+                                    <li><a href="/new_reverse"><i class="fa fa-plus fa-fw"></i> Add Reverse</a></li>
+                                    <li><a href="/gen_reverse"><i class="fa fa-upload fa-fw"></i> Generate Reverse Zone</a></li>
                                     {% for d in reverses %}
                                         <li><a href="/reverse/{{d[0]}}">{{ d[0] }}</a></li>
                                     {% endfor %}
@@ -187,10 +129,12 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="/logs"><i class="fa fa-file-text-o fa-fw"></i> Logs</a>
-                        </li>
-                        <li>
-                            <a href="/utils"><i class="fa fa-wrench fa-fw"></i> Utilities</a>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i> Utilities<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li><a><i class="fa fa-exchange fa-fw"></i> dig</a></li>
+                                <li><a><i class="fa fa-random fa-fw"></i> WHOIS</a></li>
+                                <li><a><i class="fa fa-file-text-o fa-fw"></i> BOUND Log</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a href="/settings"><i class="fa fa-cog fa-fw"></i> Settings</a>

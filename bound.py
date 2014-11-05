@@ -2,8 +2,9 @@ import config
 
 from flask import Flask, render_template, request, jsonify
 import sys
-sys.path.insert(1, '/usr/local/lib/python3.4/dist-packages/iscpy/') # guh such ghetto-hack to make this work with python 3...
-import pickle, iscpy, difflib
+sys.path.insert(1, 'lib/')
+sys.path.insert(1, 'lib/iscpy/') # guh such ghetto-hack to make this work with python 3...
+import pickle, iscpy, difflib, subprocess
 import dns.zone, dns.rdatatype
 from redis import StrictRedis
 
@@ -37,6 +38,7 @@ def get_local_zones(confFiles):
 						try:
 							zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name)
 						except:
+							# do something
 							pass
 					if zone:
 						real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
@@ -53,16 +55,36 @@ def get_local_zones(confFiles):
 	return domains, reverses, slaves, unsaved
 
 def unrelativize(zone_name, name):
-	# make this a toggle option?
+	# make this a toggle option in settings?
 	if str(name) == "@":
 		return zone_name+'.'
 	else:
 		return str(name)+'.'+zone_name+'.'
 
-def zone_file_diff(before_path, after):
-	before = None
-	file_name = None
-	difflib.unified_diff(before, after, fromfile=file_name, tofile=file_name)
+def zone_file_diff(before_path, after_obj):
+	bfile = open(before_path, 'r')
+	before = bfile.read()
+	bfile.close()
+	after_tmp = tempfile.TemporaryFile(mode='w+t')
+	after_obj.to_file(after_tmp)
+	after.seek(0)
+	after = after.read()
+	after_tmp.close()
+	return difflib.unified_diff(before.split("\n"), after.split("\n"))
+
+def get_bind_stats():
+	proc = subprocess.Popen(['bash', config.check_bind_bin]+config.check_bind_xtra, stdout=subprocess.PIPE)
+	tmp = str(proc.stdout.read()).replace('\\n', '').replace('"', '')
+	running = bool()
+	if tmp.startswith('Bind9 is running'):
+		rrd = tmp.split(' | ')[1].split(' ')
+		stuff = {}
+		for r in rrd:
+			stuff[r.split('=')[0][1:-1]] = int(r.split('=')[1])
+		stuff['running'] = True
+		return stuff
+	else:
+		return {'running': False}
 
 
 ###############
@@ -122,6 +144,21 @@ def get_records(domain_name=None, slave_name=None, reverse_name=None):
 # API routes #
 ##############
 
+#replace this later with whatever api tool i end up using
+@app.route('/api/v1/bind_stats')
+def stats_endpoint():
+	return jsonify(get_bind_stats())
+
+@app.route('/api/v1/bind_running')
+def running_endpoint():
+	return jsonify({'running': get_bind_stats()['running']})
+
+#############
+# Dev stuff #
+#############
+
 if __name__ == '__main__':
 	app.debug = True
+	app.host = "127.0.0.1"
+	app.port = 80
 	app.run()
