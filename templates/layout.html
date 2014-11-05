@@ -145,6 +145,28 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
+        <script>
+            $.getJSON('/api/v1/bind_running').done(function(data) {
+                if (data.running) {
+                    $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-up bind-up");
+                    $(".bind-status").children("a").children("i").attr('title', 'BIND is running');
+                } else {
+                    $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-down bind-down");
+                    $(".bind-status").children("a").children("i").attr('title', 'BIND is down');
+                }
+            });
+            setInterval(function updateStats() {
+                $.getJSON('/api/v1/bind_running').done(function(data) {
+                    if (data.running) {
+                        $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-up bind-up");
+                        $(".bind-status").children("a").children("i").attr('title', 'BIND is running');
+                    } else {
+                        $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-down bind-down");
+                        $(".bind-status").children("a").children("i").attr('title', 'BIND is down');
+                    }
+                });
+            }, 30000);
+        </script>
 
         {% block body %}{% endblock %}
 
