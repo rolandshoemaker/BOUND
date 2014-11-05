@@ -43,8 +43,15 @@ $(function() {
         lines: {show:true}
     }];
 
-    chart = $.plot('.flot-chart-content', series, {});
-
+    chart = $.plot($(".flot-chart-content"), series, {
+        grid: {
+            borderWidth: 0
+        },
+        shadowSize: 0,
+        yaxis: {tickLength:0}, 
+        xaxis: {tickLength:0}
+    });
+    
     function weird(data, new_thing) {
         if (data.length) {
             data = data.slice(1);
@@ -53,6 +60,7 @@ $(function() {
             var previous = data.length ? data[data.length - 1] : 50;
             data.push(new_thing);
         }
+        data.push(new_thing);
         var res = [];
         for (var i = 0; i < data.length; ++i) {
             res.push([i, data[i]]);
