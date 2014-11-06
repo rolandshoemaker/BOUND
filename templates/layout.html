@@ -67,20 +67,9 @@
 
             <ul class="nav navbar-top-links navbar-right">
                 <!-- /.dropdown -->
-                <li class="bind-status"><a><i class="fa fa-question-circle bind-unknown" title="BIND status unknown"></i></a></li>
+                <li class="bind-status"><a title="BIND status unknown"><i class="fa fa-question-circle bind-unknown"></i></a></li>
                 <!-- /.dropdown -->
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
-                        <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
-                    <!-- /.dropdown-user -->
-                </li>
+                <li><a href="login.html" title="Logout"><i class="fa fa-sign-out fa-fw"></i></a></li>
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
@@ -149,20 +138,20 @@
             $.getJSON('/api/v1/bind_running').done(function(data) {
                 if (data.running) {
                     $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-up bind-up");
-                    $(".bind-status").children("a").children("i").attr('title', 'BIND is running');
+                    $(".bind-status").children("a").attr('title', 'BIND is running');
                 } else {
                     $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-down bind-down");
-                    $(".bind-status").children("a").children("i").attr('title', 'BIND is down');
+                    $(".bind-status").children("a").attr('title', 'BIND is down');
                 }
             });
             setInterval(function updateStats() {
                 $.getJSON('/api/v1/bind_running').done(function(data) {
                     if (data.running) {
                         $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-up bind-up");
-                        $(".bind-status").children("a").children("i").attr('title', 'BIND is running');
+                        $(".bind-status").children("a").attr('title', 'BIND is running');
                     } else {
                         $(".bind-status").children("a").children("i").attr('class', "fa fa-arrow-circle-down bind-down");
-                        $(".bind-status").children("a").children("i").attr('title', 'BIND is down');
+                        $(".bind-status").children("a").attr('title', 'BIND is down');
                     }
                 });
             }, 30000);
