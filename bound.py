@@ -73,7 +73,7 @@ def zone_file_diff(before_path, after_obj):
 	return difflib.unified_diff(before.split("\n"), after.split("\n"))
 
 def get_bind_stats():
-	proc = subprocess.Popen([config.check_bind_bin]+config.check_bind_xtra, stdout=subprocess.PIPE)
+	proc = subprocess.Popen(['bash', config.check_bind_bin]+config.check_bind_xtra, stdout=subprocess.PIPE)
 	tmp = proc.stdout.read().decode('utf-8').replace('\\n', '').replace('"', '')
 	running = bool()
 	if tmp.startswith('Bind9 is running'):
@@ -159,6 +159,4 @@ def running_endpoint():
 
 if __name__ == '__main__':
 	app.debug = True
-	app.host = "127.0.0.1"
-	app.port = 80
-	app.run()
+	app.run(host="192.168.1.134", port=80)

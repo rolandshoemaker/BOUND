@@ -25,7 +25,7 @@ ST_UK=3
 path_pid="/var/run/named"
 name_pid="named.pid"
 path_rndc="/usr/sbin"
-path_stats="/var/bind"
+path_stats="/var/cache/bind"
 path_tmp="/tmp"
 version=9.4
 pid_check=1
@@ -141,9 +141,9 @@ check_pid() {
 trigger_stats() {
     if [ -n "$path_chroot" ]
     then
-        sudo chroot $path_chroot $path_rndc/rndc stats
+        chroot $path_chroot $path_rndc/rndc stats
     else
-    sudo $path_rndc/rndc stats
+    $path_rndc/rndc stats
     fi
 }
 

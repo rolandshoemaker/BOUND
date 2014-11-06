@@ -1,7 +1,7 @@
 #################################
 # BIND zone conf file locations #
 #################################
-bind_zone_confs = ['test.conf.local']
+bind_zone_confs = ['/etc/bind/named.conf.local']
 
 ######################
 # Zone style options #
@@ -13,4 +13,4 @@ relativize_zones = True
 ###########################
 show_stats = True
 check_bind_bin = 'bin/check_bind.sh'
-check_bind_xtra = ['-V 9.5']
+check_bind_xtra = ['-V', '9.5']
