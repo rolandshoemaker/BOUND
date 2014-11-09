@@ -159,4 +159,4 @@ def running_endpoint():
 
 if __name__ == '__main__':
 	app.debug = True
-	app.run(host="192.168.1.134", port=80)
+	app.run(host=config.host, port=80)
