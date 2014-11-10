@@ -29,7 +29,7 @@
     <link href="/static/css/plugins/morris.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="/static/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
     <!-- jQuery -->
     <script src="/static/js/jquery.js"></script>
@@ -84,7 +84,7 @@
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> Zones<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#">Domains <span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-at fa-fw"></i> Domains <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                     <li><a href="/new_zone/domain"><i class="fa fa-plus fa-fw"></i> Add Domain</a></li>
                                     {% for d in domains %}
@@ -94,25 +94,17 @@
                                     <!-- /.nav-third-level -->
                                 </li>
                                 <li>
-                                    <a href="#">Slaves <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                    <li><a href="/new_zone/slave"><i class="fa fa-plus fa-fw"></i> Add Slave</a></li>
-                                    {% for d in slaves %}
-                                        <li><a href="/slave/{{d[0]}}">{{ d[0] }}</a></li>
-                                    {% endfor %}
-                                    </ul>
-                                    <!-- /.nav-third-level -->
-                                </li>
-                                <li>
-                                    <a href="#">Reverses <span class="fa arrow"></span></a>
+                                    <a href="#"><i class="fa fa-mail-reply fa-fw"></i> Reverses <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                     <li><a href="/new_zone/reverse"><i class="fa fa-plus fa-fw"></i> Add Reverse</a></li>
-                                    <li><a href="/gen_reverse"><i class="fa fa-upload fa-fw"></i> Generate Reverse Zone</a></li>
                                     {% for d in reverses %}
                                         <li><a href="/reverse/{{d[0]}}">{{ d[0] }}</a></li>
                                     {% endfor %}
                                     </ul>
                                     <!-- /.nav-third-level -->
+                                </li>
+                                <li>
+                                    <a href="/slaves"><i class="fa fa-code-fork fa-fw"></i> Slaves</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->

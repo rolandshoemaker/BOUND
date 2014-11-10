@@ -208,10 +208,9 @@ def index():
 	return render_template('dashboard.html', domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications)
 
 @app.route('/domain/<string:domain_name>')
-@app.route('/slave/<string:slave_name>')
 @app.route('/reverse/<string:reverse_name>')
 @login_required
-def get_records(domain_name=None, slave_name=None, reverse_name=None):
+def get_records(domain_name=None, reverse_name=None):
 	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
 	notifications = [] # from logs?
 	inspect_thing = None
@@ -219,10 +218,6 @@ def get_records(domain_name=None, slave_name=None, reverse_name=None):
 		for d in domains:
 			if d[0] == domain_name:
 				inspect_thing = d
-	elif slave_name:
-		for s in slaves:
-			if s[0] == slave_name:
-				inspect_thing = s
 	elif reverse_name:
 		for r in reverses:
 			if r[0] == reverse_name:
@@ -241,7 +236,7 @@ def get_records(domain_name=None, slave_name=None, reverse_name=None):
 @app.route('/new_zone/<string:zone_type>', methods=['GET'])
 @login_required
 def new_zone(zone_type):
-	if zone_type in ['domain', 'slave', 'reverse']:
+	if zone_type in ['domain', 'reverse']:
 		return render_template('new_zone.html', zone_type=zone_type)
 	else:
 		flash('Invalid zone type \''+zone_type+'\'.')

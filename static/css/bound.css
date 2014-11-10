@@ -1,15 +1,25 @@
 body {
-	background-color: aliceblue !important;
+	background-color: #E5DBF6 !important;
 }
 
 .navbar-default {
-	background-color: aliceblue !important;
+	background-color: #E5DBF6 !important;
+	border: 0 !important;
 }
 
-ul.nav a:hover { background-color: #f6faff !important; }
+ul.nav a:hover { background-color: #EDE8F6 !important; }
 
 .sidebar ul li a.active {
-    background-color: #fafcff;
+    background-color: #DBCCF3;
+}
+
+.panel {
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+.panel-heading {
+	border: 0 !important;
 }
 
 td.type {
@@ -20,7 +30,6 @@ td.type {
 th.type, th.actions, th.ttl, td.actions, td.ttl {
 	text-align: center;
 }
-
 
 td#SOA {
 	background-color: #FF9F55;
@@ -133,4 +142,8 @@ td i.fa-upload {
 	position: absolute;
 	text-align: center;
 	font-size: 12px;
+}
+
+#reverse-help {
+	cursor: pointer;
 }
