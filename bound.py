@@ -177,9 +177,9 @@ def login_view():
 				login_user(user, remember=remember_me)
 				return redirect(request.form.get('next') or url_for('index'))
 			else:
-				abort(400)
+				return unauthorized()
 		else:
-			abort(400)
+			return unauthorized()
 
 @app.route('/logout')
 @login_required
@@ -189,7 +189,10 @@ def logout():
 
 @login_manager.unauthorized_handler
 def unauthorized():
-	flash('Login required.')
+	if 'username' in request.form or 'password' in request.form:
+		flash('Bad credentials, please retry.')
+	else:
+		flash('Login required.')
 	return redirect(url_for('login_view'))
 
 ####################
