@@ -1,8 +1,8 @@
 import config
 
-from flask import Flask, render_template, request, session, jsonify, abort, redirect, url_for, g
+from flask import Flask, render_template, request, session, jsonify, abort, redirect, url_for, g, flash
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.login import login_user, logout_user, current_user, login_required
+from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from passlib.apps import custom_app_context as pwd_context
 
@@ -138,7 +138,7 @@ class User(db.Model):
     def is_authenticated(self):
     	return True
 
-    def is_actuve(self):
+    def is_active(self):
     	return True
 
     def is_anonymous(self):
@@ -153,6 +153,10 @@ class User(db.Model):
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@app.before_request
+def before_request():
+    g.user = current_user
+
 @login_manager.user_loader
 def load_user(userid):
     return User.query.get(int(userid))
@@ -164,19 +168,29 @@ def login_view():
 	if request.method == 'GET':
 		return render_template('login.html')
 	elif request.method == 'POST':
-		if request.args.username and request.args.password:
-			user = User.query.filter_by(name=request.args.username)
-			if user and user.verify_password(request.args.password):
+		if request.form['username'] and request.form['password']:
+			user = User.query.filter_by(name=request.form['username']).first()
+			if user and user.verify_password(request.form['password']):
 				remember_me = False
-				if 'remember_me' in request.args:
-					remember_me = request.args.remember_me
+				if 'remember_me' in request.form:
+					remember_me = request.form['remember_me']
 				login_user(user, remember=remember_me)
-				return redirect(request.args.get('next') or url_for('index'))
+				return redirect(request.form.get('next') or url_for('index'))
 			else:
 				abort(400)
 		else:
 			abort(400)
 
+@app.route('/logout')
+@login_required
+def logout():
+	logout_user()
+	return redirect(url_for('login_view'))
+
+@login_manager.unauthorized_handler
+def unauthorized():
+	flash('Login required.')
+	return redirect(url_for('login_view'))
 
 ####################
 # Front end routes #

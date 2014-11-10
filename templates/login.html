@@ -10,6 +10,13 @@
     <!-- Custom Fonts -->
     <link href="/static/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 {% endblock %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger alert-dismissable">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 {% block body %}
     <div class="container">
         <div class="row">
