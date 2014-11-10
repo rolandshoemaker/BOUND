@@ -1,16 +1,24 @@
 body {
-	background-color: #E5DBF6 !important;
+	background-color: #262525 !important;
 }
 
 .navbar-default {
-	background-color: #E5DBF6 !important;
+	background-color: #262525 !important;
 	border: 0 !important;
 }
 
-ul.nav a:hover { background-color: #EDE8F6 !important; }
+ul.nav a:hover { background-color: #484747 !important; }
 
 .sidebar ul li a.active {
-    background-color: #DBCCF3;
+    background-color: #676565;
+}
+
+.navbar-default .navbar-brand {
+	color: white !important;
+}
+
+a {
+	color: white !important;
 }
 
 .panel {
