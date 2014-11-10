@@ -86,7 +86,7 @@
                                 <li>
                                     <a href="#">Domains <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_domain"><i class="fa fa-plus fa-fw"></i> Add Domain</a></li>
+                                    <li><a href="/new_zone/domain"><i class="fa fa-plus fa-fw"></i> Add Domain</a></li>
                                     {% for d in domains %}
                                         <li><a href="/domain/{{d[0]}}">{{d[0]}}</a></li>
                                     {% endfor %}
@@ -96,7 +96,7 @@
                                 <li>
                                     <a href="#">Slaves <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_slave"><i class="fa fa-plus fa-fw"></i> Add Slave</a></li>
+                                    <li><a href="/new_zone/slave"><i class="fa fa-plus fa-fw"></i> Add Slave</a></li>
                                     {% for d in slaves %}
                                         <li><a href="/slave/{{d[0]}}">{{ d[0] }}</a></li>
                                     {% endfor %}
@@ -106,7 +106,7 @@
                                 <li>
                                     <a href="#">Reverses <span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                    <li><a href="/new_reverse"><i class="fa fa-plus fa-fw"></i> Add Reverse</a></li>
+                                    <li><a href="/new_zone/reverse"><i class="fa fa-plus fa-fw"></i> Add Reverse</a></li>
                                     <li><a href="/gen_reverse"><i class="fa fa-upload fa-fw"></i> Generate Reverse Zone</a></li>
                                     {% for d in reverses %}
                                         <li><a href="/reverse/{{d[0]}}">{{ d[0] }}</a></li>
@@ -157,8 +157,10 @@
             }, 30000);
         </script>
 
-        {% block body %}{% endblock %}
-
+        <body>
+            {% block body %}
+            {% endblock %}
+        </body>
     </div>
     <!-- /#wrapper -->
 </body>

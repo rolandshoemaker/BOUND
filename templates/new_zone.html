@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">New {{zone_type}}</h1>
+            </div>
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <br/>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Notifications</div>
+                        <div class="panel-body">
+                            {% for message in messages %}
+                              <div class="alert alert-info alert-dismissable">{{message}}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+        <div class="row">
+        	<div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        	Zone information
+                        </div>
+                        <div class="panel-body">
+                            <form role='form'>
+                                {% if zone_type == 'domain' %}
+                                    <div class="form-group">
+                                        <label>Domain name</label>
+                                        <input class="form-control" name="domain_name" placeholder="example.com">
+                                    </div>
+                                {% elif zone_type == 'slave' %}
+                                    <div class="form-group">
+                                        <label>Domain name</label>
+                                        <input class="form-control" name="slave_name" placeholder="example.com">
+                                    </div>
+                                    <label>Master nameservers to pull updates from (<i>at least one is required!</i>)</label>
+                                    <div class="form-group input-group">
+                                        <span class="input-group-addon">1</span>
+                                        <input name="master_ns1" type="text" class="form-control" placeholder="ns1.example.com">
+                                    </div>
+                                    <div class="form-group input-group">
+                                        <span class="input-group-addon">2</span>
+                                        <input name="master_ns2" type="text" class="form-control" placeholder="ns2.example.com">
+                                    </div>
+                                    <div class="form-group input-group">
+                                        <span class="input-group-addon">3</span>
+                                        <input name="master_ns3" type="text" class="form-control" placeholder="ns3.example.com">
+                                    </div>
+                                {% elif zone_type == 'reverse' %}
+                                    <div class="form-group">
+                                        <label>Reverse prefix</label>
+                                        <input class="form-control" name="reverse_name" placeholder="2001:470:c0ff:ee::/64 or 10.10.1.0/24">
+                                    </div>
+                                    <div class="form-group">
+                                            <label>Reverse input style (<i>Only the Standard style is IPv6 compatible</i>)</label>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="reverse_type" id="optionsRadios3" value="Standard" checked>Standard
+                                                </label>
+                                                <i class="fa fa-question fa-fw" data-toggle="modal" data-target="#StandardModal"></i>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="StandardModal" tabindex="-1" role="dialog" aria-labelledby="StandardLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="StandardLabel">Modal title</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                uuuuuuuuuuum, tbh i'm not 100% sure what standard notation is. :<
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- /.modal -->
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="reverse_type" id="optionsRadios1" value="RFC4183">RFC4183
+                                                </label>
+                                                <i class="fa fa-question fa-fw" data-toggle="modal" data-target="#RFC4183Modal"></i>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="RFC4183Modal" tabindex="-1" role="dialog" aria-labelledby="RFC4183Label" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="RFC4183Label">RFC4183 hints</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Specifying rDNS with RFC4183 notation is simple, if you were allocated <code>172.31.15.144/28</code> your prefix would be <code>144-28.15.31.172.in-addr.arpa</code>.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- /.modal -->
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="reverse_type" id="optionsRadios2" value="RFC2317">RFC2317
+                                                </label>
+                                                <i class="fa fa-question fa-fw" data-toggle="modal" data-target="#RFC2317Modal"></i>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="RFC2317Modal" tabindex="-1" role="dialog" aria-labelledby="RFC2317Label" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="RFC2317Label">RFC2317 hints</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                rDNS with RFC2317 is similar to RFC4183, it uses a prefix that starts with the last octet of your network IP address, followed by a hyphen, then the last octet of your broadcast address, then the rest of the usual <code>three-octets.in-addr.arpa</code> notation.
+
+                                                                If you were allocated <code>172.31.15.144/28</code> (<code>172.31.15.144</code> being the network IP and <code>172.31.15.159</code> being the broadcast IP) your prefix would be <code>144-159.15.31.172.in-addr.arpa</code>.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- /.modal -->
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="reverse_type" id="optionsRadios3" value="DeGroot">DeGroot
+                                                </label>
+                                                <i class="fa fa-question fa-fw" data-toggle="modal" data-target="#DeGrootModal"></i>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="DeGrootModal" tabindex="-1" role="dialog" aria-labelledby="DeGrootLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="DeGrootLabel">Modal title</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                DeGroot is used to delegate the rDNS for a CIDR netblock (typically a /24). If you were allocated <code>172.31.15.144/28</code> your prefix would be <code>subnet144.15.31.172.in-addr.arpa</code>.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- /.modal -->
+                                            </div>
+                                        </div>
+                                {% endif %}
+                                <button name="button" value="login" class="btn btn-lg btn-success btn-block">Add {{zone_type}} zone</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        $('#domain-zone').dataTable({
+    		"lengthMenu": [25, 50, 75, 100],
+    		"bSort": false
+		});
+    });
+    </script>
+{% endblock %}

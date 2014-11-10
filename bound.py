@@ -190,10 +190,10 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized():
 	if 'username' in request.form or 'password' in request.form:
-		flash('Bad credentials, please retry.')
+		flash('Bad credentials, please try again.')
 	else:
 		flash('Login required.')
-	return redirect(url_for('login_view'))
+	return redirect(url_for('login_view')) 
 
 ####################
 # Front end routes #
@@ -227,33 +227,59 @@ def get_records(domain_name=None, slave_name=None, reverse_name=None):
 			if r[0] == reverse_name:
 				inspect_thing = r
 	else:
-		return ""
+		flash('Invalid request, zone name is required.')
+		return redirect(url_for('index'))
+
 
 	if inspect_thing:
 		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len)
 	else:
-		return ""
+		flash('Invalid request, zone name/zone is bad.')
+		return redirect(url_for('index'))
+
+@app.route('/new_zone/<string:zone_type>', methods=['GET'])
+@login_required
+def new_zone(zone_type):
+	if zone_type in ['domain', 'slave', 'reverse']:
+		return render_template('new_zone.html', zone_type=zone_type)
+	else:
+		flash('Invalid zone type \''+zone_type+'\'.')
+		return redirect(url_for('index'))
 
 ##############
 # API routes #
 ##############
 
-@app.route('/api/v1/bind_stats')
+@app.route('/api/v1/bind_stats', methods=['GET'])
 @login_required
 def stats_endpoint():
+	"""Return current BIND stats."""
 	return jsonify(get_bind_stats())
 
-@app.route('/api/v1/bind_running')
+@app.route('/api/v1/bind_running', methods=['GET'])
 @login_required
 def running_endpoint():
+	"""Return wether BIND is running."""
 	return jsonify({'running': get_bind_stats()['running']})
+
+@app.route('/api/v1/users', methods=['POST', 'UPDATE', 'DELETE'])
+def api_user():
+	pass
+
+@app.route('/api/v1/zone', methods=['POST', 'UPDATE', 'DELETE'])
+def api_zone():
+	pass
+
+@app.route('/api/v1/record', methods=['POST', 'UPDATE', 'DELETE'])
+def api_record():
+	pass
 
 #############
 # Dev stuff #
 #############
 
 if __name__ == '__main__':
-	# Build DB and add admin user
+	# Build DB and add admin user with default password from config.default_admin_password
 	db.create_all()
 	db.session.commit()
 	admin = User(name='admin')
