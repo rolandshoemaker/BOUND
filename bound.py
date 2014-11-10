@@ -205,7 +205,7 @@ def unauthorized():
 def index():
 	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
 	notifications = [] # from logs?
-	return render_template('dashboard.html', domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications)
+	return render_template('dashboard.html', domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, page='dashboard')
 
 @app.route('/domain/<string:domain_name>')
 @app.route('/reverse/<string:reverse_name>')
@@ -217,18 +217,19 @@ def get_records(domain_name=None, reverse_name=None):
 	if domain_name:
 		for d in domains:
 			if d[0] == domain_name:
+				page = 'zone/domain/'+domain_name
 				inspect_thing = d
 	elif reverse_name:
 		for r in reverses:
 			if r[0] == reverse_name:
+				page = 'zone/reverse/'+reverse_name
 				inspect_thing = r
 	else:
 		flash('Invalid request, zone name is required.')
 		return redirect(url_for('index'))
 
-
 	if inspect_thing:
-		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len)
+		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page)
 	else:
 		flash('Invalid request, zone name/zone is bad.')
 		return redirect(url_for('index'))
@@ -237,7 +238,7 @@ def get_records(domain_name=None, reverse_name=None):
 @login_required
 def new_zone(zone_type):
 	if zone_type in ['domain', 'reverse']:
-		return render_template('new_zone.html', zone_type=zone_type)
+		return render_template('new_zone.html', zone_type=zone_type, page='zone/'+zone_type+'/new')
 	else:
 		flash('Invalid zone type \''+zone_type+'\'.')
 		return redirect(url_for('index'))
