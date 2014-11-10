@@ -12,12 +12,12 @@
           {% if messages %}
             <br/>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col">
                     <div class="panel panel-default">
                         <div class="panel-heading">Notifications</div>
                         <div class="panel-body">
                             {% for message in messages %}
-                              <div class="alert alert-info alert-dismissable">{{message}}</div>
+                              <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{message}}</div>
                             {% endfor %}
                         </div>
                     </div>

@@ -3,6 +3,7 @@ import config
 from flask import Flask, render_template, request, session, jsonify, abort, redirect, url_for, g, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
+
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from passlib.apps import custom_app_context as pwd_context
 

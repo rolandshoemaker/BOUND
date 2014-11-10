@@ -1,7 +1,7 @@
 //Flot BIND stats chart
 $(function() {
     var maximum = $(".flot-chart-content").outerWidth() / 2 || 300;
-    var users = [];
+    var user = [];
     var failure = [];
     var dropped = [];
     var duplicate = [];
