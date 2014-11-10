@@ -1,7 +1,7 @@
 #################################
 # BIND zone conf file locations #
 #################################
-host = 192.168.1.8
+host = '192.168.1.8'
 bind_zone_confs = ['/etc/bind/named.conf.local']
 
 ######################
