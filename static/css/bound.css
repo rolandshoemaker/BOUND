@@ -155,3 +155,7 @@ td i.fa-upload {
 #reverse-help {
 	cursor: pointer;
 }
+
+td.slave_type, th.cached, td.cached {
+	text-align: center;
+}

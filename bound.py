@@ -28,6 +28,9 @@ app.config['SECRET_KEY'] = str(uuid.uuid4())
 def get_local_zones(confFiles):
 	"""Return list of quads containing zone name, dnspython zone object, zone type (master/slave), and whether user has changed the zone for domains, reverses, and slaves."""
 	unsaved = bool()
+	slaves = []
+	reverses = []
+	domains = []
 	for confFile in confFiles:
 		with open(confFile) as input_config_file:
 			conf_string = input_config_file.read()
@@ -52,17 +55,23 @@ def get_local_zones(confFiles):
 							# do something
 							pass
 					if zone:
-						real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
-	slaves = []
-	reverses = []
-	domains = []
+						if zone_obj['type'].lower() == 'slave' and zone_obj.get('masters', None):
+							masters = list(zone_obj['masters'])
+							masters.reverse()
+							slaves.append([zone_name, zone_obj['type'], True, masters, zone_changed])
+						elif not zone_obj['type'].lower() == 'slave':
+							real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
+				elif zone_obj['type'].lower() == 'slave' and zone_obj.get('masters', None):
+					masters = list(zone_obj['masters'])
+					masters.reverse()
+					slaves.append([zone_name, zone_obj['type'], False, masters, zone_changed])
+
 	for z in real_zones:
-		if z[2].lower() == 'slave':
-			slaves.append(z)
-		elif z[0].lower().endswith('in-addr.arpa'):
+		if z[0].lower().endswith('in-addr.arpa'):
 			reverses.append(z)
 		else:
 			domains.append(z)
+
 	return domains, reverses, slaves, unsaved
 
 def unrelativize(zone_name, name):
@@ -172,10 +181,7 @@ def login_view():
 		if request.form['username'] and request.form['password']:
 			user = User.query.filter_by(name=request.form['username']).first()
 			if user and user.verify_password(request.form['password']):
-				remember_me = False
-				if 'remember_me' in request.form:
-					remember_me = request.form['remember_me']
-				login_user(user, remember=remember_me)
+				login_user(user)
 				return redirect(request.form.get('next') or url_for('index'))
 			else:
 				return unauthorized()

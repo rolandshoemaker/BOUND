@@ -5,3 +5,6 @@ db.192
 db.home.local
 config.py
 tmp.db
+db.home.local
+db.192
+db.home.slave

@@ -29,26 +29,32 @@
         	<div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                        	<i>Slave</i> zone information
+                        	<i>Slave</i> zones
                         </div>
                         <div class="panel-body">
                             <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave zone</button><br/>
                             <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="domain-zone">
+                                <table class="table table-bordered table-hover" id="slaves">
                                 	<thead>
                                 		<th class="name">Name</th>
                                 		<th class="type">Type</th>
-                                		<th class="cached">Records cached on disk</th>
+                                		<th class="cached">Cache</th>
                                 		<th class="masters">Masters</th>
                                         <th class="actions">Actions</th>
                                 	</thead>
                             		<tbody>
-                            			{% for name, zone, zone_type, zone_changed in slaves %}
+                            			{% for name, zone_type, cached, masters, zone_changed in slaves %}
                         					<tr>
-                            					<td class="name">name</td>
-                            					<!--<td id="{{rtype_to_text(rdata.rdtype)}}" class="type">{{rtype_to_text(rdata.rdtype)}}</td>-->
-                            					<td class="cached"></td>
-                            					<td class="masters"></td>
+                            					<td class="name">{{name}}</td>
+                            					<td class="slave_type">{{zone_type.title()}}</td>
+                            					<td class="cached">
+                                                    {% if cached %}
+                                                        Disk
+                                                    {% else %}
+                                                        Memory
+                                                    {% endif %}
+                                                </td>
+                            					<td class="masters">{{"<br/>".join(masters)|safe}}</td>
                             					<td class="actions">
                             						<i class="fa fa-pencil" title="Edit"></i> 
                             						<i class="fa fa-exclamation-circle" title="Delete"></i>
@@ -66,7 +72,7 @@
     </div>
     <script>
     $(document).ready(function() {
-        $('#domain-zone').dataTable({
+        $('#slaves').dataTable({
     		"lengthMenu": [25, 50, 75, 100],
     		"bSort": false
     		// "aaSorting": [],
