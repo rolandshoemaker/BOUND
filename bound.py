@@ -229,10 +229,16 @@ def get_records(domain_name=None, reverse_name=None):
 		return redirect(url_for('index'))
 
 	if inspect_thing:
-		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page)
+		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page)
 	else:
 		flash('Invalid request, zone name/zone is bad.')
 		return redirect(url_for('index'))
+
+@app.route('/slaves', methods=['GET'])
+@login_required
+def slaves():
+	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
+	return render_template('slaves.html', slaves=slaves, page='zone/slaves')
 
 @app.route('/new_zone/<string:zone_type>', methods=['GET'])
 @login_required

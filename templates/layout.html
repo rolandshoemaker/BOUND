@@ -25,9 +25,6 @@
     <!-- Custom CSS -->
     <link href="/static/css/sb-admin-2.css" rel="stylesheet">
 
-    <!-- Morris Charts CSS -->
-    <link href="/static/css/plugins/morris.css" rel="stylesheet">
-
     <!-- Custom Fonts -->
     <link href="/static/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -88,7 +85,7 @@
                                     <ul class="nav nav-third-level">
                                     <li><a {% if page.endswith('domain/new') %} class="active" {% endif %} href="/new_zone/domain"><i class="fa fa-plus fa-fw"></i> New Domain</a></li>
                                     {% for d in domains %}
-                                        <li><a href="/domain/{{d[0]}}">{{d[0]}}</a></li>
+                                        <li><a {% if page == 'zone/domain/'+d[0] %} class="active" {% endif %} href="/domain/{{d[0]}}">{{d[0]}}</a></li>
                                     {% endfor %}
                                     </ul>
                                     <!-- /.nav-third-level -->
@@ -98,13 +95,13 @@
                                     <ul class="nav nav-third-level">
                                     <li><a {% if page.endswith('reverse/new') %} class="active" {% endif %} href="/new_zone/reverse"><i class="fa fa-plus fa-fw"></i> New Reverse</a></li>
                                     {% for d in reverses %}
-                                        <li><a href="/reverse/{{d[0]}}">{{ d[0] }}</a></li>
+                                        <li><a {% if page == 'zone/domain/'+d[0] %} class="active" {% endif %} href="/reverse/{{d[0]}}">{{ d[0] }}</a></li>
                                     {% endfor %}
                                     </ul>
                                     <!-- /.nav-third-level -->
                                 </li>
                                 <li>
-                                    <a {% if page.startswith('zone/slave') %} class="active" {% endif %} href="/slaves"><i class="fa fa-code-fork fa-fw"></i> Slaves</a>
+                                    <a {% if page == 'zone/slaves' %} class="active" {% endif %} href="/slaves"><i class="fa fa-chain fa-fw"></i> Slaves</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -112,9 +109,9 @@
                         <li {% if page.startswith('utils') %} class="active" {% endif %}>
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Utilities<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li><a><i class="fa fa-exchange fa-fw"></i> dig</a></li>
-                                <li><a><i class="fa fa-random fa-fw"></i> WHOIS</a></li>
-                                <li><a><i class="fa fa-file-text-o fa-fw"></i> BOUND Log</a></li>
+                                <li><a {% if page =='utils/dig' %} class="active" {% endif %}><i class="fa fa-exchange fa-fw"></i> dig</a></li>
+                                <li><a {% if page =='utils/whois' %} class="active" {% endif %}><i class="fa fa-question fa-fw"></i> WHOIS</a></li>
+                                <li><a {% if page =='utils/log' %} class="active" {% endif %}><i class="fa fa-file-text-o fa-fw"></i> BOUND Log</a></li>
                             </ul>
                         </li>
                         <li>

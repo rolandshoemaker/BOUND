@@ -50,7 +50,7 @@ $(function() {
         colors: ['#008000', '#0C64E8', '#E80C3E', '#FFA500', '#1CC8E8', '#E80C8C', '#00FF3F', '#FFFF00'],
         shadowSize: 0,
         yaxis: {tickLength:1, tickDecimals: 0, min: 0}, 
-        xaxis: {tickLength:1, mode: "time", min: new Date().getTime(), tickSize: [1, 'minute']},
+        xaxis: {tickLength:1, mode: "time", tickSize: [1, 'minute']},
         legend: {position: 'nw', labelBoxBorderColor: null}
     });
 

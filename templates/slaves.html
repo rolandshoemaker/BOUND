@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Slave zones</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+
+        </div>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <br/>
+            <div class="row">
+                <div class="col">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Notifications</div>
+                        <div class="panel-body">
+                            {% for message in messages %}
+                              <div class="alert alert-info alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>{{message}}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+          {% endif %}
+        {% endwith %}
+        <div class="row">
+        	<div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                        	<i>Slave</i> zone information
+                        </div>
+                        <div class="panel-body">
+                            <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave zone</button><br/>
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="domain-zone">
+                                	<thead>
+                                		<th class="name">Name</th>
+                                		<th class="type">Type</th>
+                                		<th class="cached">Records cached on disk</th>
+                                		<th class="masters">Masters</th>
+                                        <th class="actions">Actions</th>
+                                	</thead>
+                            		<tbody>
+                            			{% for name, zone, zone_type, zone_changed in slaves %}
+                        					<tr>
+                            					<td class="name">name</td>
+                            					<!--<td id="{{rtype_to_text(rdata.rdtype)}}" class="type">{{rtype_to_text(rdata.rdtype)}}</td>-->
+                            					<td class="cached"></td>
+                            					<td class="masters"></td>
+                            					<td class="actions">
+                            						<i class="fa fa-pencil" title="Edit"></i> 
+                            						<i class="fa fa-exclamation-circle" title="Delete"></i>
+                            					</td>
+                        					</tr>
+                            			{% endfor %}
+                            		</tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function() {
+        $('#domain-zone').dataTable({
+    		"lengthMenu": [25, 50, 75, 100],
+    		"bSort": false
+    		// "aaSorting": [],
+    		// "aoColumnDefs": [{'bSortable': false, 'aTargets': [3,4]}]
+		});
+    });
+    </script>
+    <!-- /#page-wrapper -->
+{% endblock %}
