@@ -33,6 +33,7 @@
                         </div>
                         <div class="panel-body">
                             <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave zone</button><br/>
+                            should add a cache legend n stuff...<br/><br/>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="slaves">
                                 	<thead>
@@ -43,18 +44,20 @@
                                         <th class="actions">Actions</th>
                                 	</thead>
                             		<tbody>
-                            			{% for name, zone_type, cached, masters, zone_changed in slaves %}
+                            			{% for name, zone, zone_type, zone_changed, cached, masters in slaves %}
                         					<tr>
                             					<td class="name">{{name}}</td>
                             					<td class="slave_type">{{zone_type.title()}}</td>
-                            					<td class="cached">
                                                     {% if cached %}
-                                                        Disk
+                                                        <td class="cached" id="disk">
+                                                            <a href="/slave/{{name}}" title="Cached on disk, click to view records"><i class="fa fa-hdd-o fa-fw"></i></a>
+                                                        </td>
                                                     {% else %}
-                                                        Memory
+                                                        <td class="cached" id="mem">
+                                                            <i class="fa fa-database fa-fw" title="Cached in memory"></i>
+                                                        </td>
                                                     {% endif %}
-                                                </td>
-                            					<td class="masters">{{"<br/>".join(masters)|safe}}</td>
+                            					<td class="masters"><code>{{"</code><br/><code>".join(masters)|safe}}</code></td>
                             					<td class="actions">
                             						<i class="fa fa-pencil" title="Edit"></i> 
                             						<i class="fa fa-exclamation-circle" title="Delete"></i>

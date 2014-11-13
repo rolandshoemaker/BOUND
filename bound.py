@@ -10,7 +10,7 @@ from passlib.apps import custom_app_context as pwd_context
 import sys
 sys.path.insert(1, 'lib/')
 sys.path.insert(1, 'lib/iscpy/') # guh such ghetto-hack to make this work with python 3...
-import pickle, iscpy, difflib, subprocess, uuid
+import pickle, iscpy, difflib, subprocess, uuid, tempfile, datetime
 import dns.zone, dns.rdatatype
 from redis import StrictRedis
 
@@ -39,32 +39,33 @@ def get_local_zones(confFiles):
 		for zone_name, zone_obj in zones.items():
 			if zone_name.startswith('zone '):
 				zone_name = zone_name[6:-1].lower()
+				zone_changed = bool()
 				if zone_obj.get('file', None) and zone_obj.get('type', None):
 					zone = None
-					zone_changed = bool()
 					# check if zone name is in redis for user if so add it to real_zones instead, if not do as normal
 					changed = predis.get(g.user.name+zone_name)
-					if changed:
-						zone = changed
-						zone_changed = True
-						unsaved = True
-					else:
-						try:
-							zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name)
-						except:
+					#if changed:
+					#zone = changed
+					#zone_changed = True
+					#unsaved = True
+					#else:
+						#try:
+					zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name)
+						#except:
 							# do something
-							pass
-					if zone:
-						if zone_obj['type'].lower() == 'slave' and zone_obj.get('masters', None):
-							masters = list(zone_obj['masters'])
-							masters.reverse()
-							slaves.append([zone_name, zone_obj['type'], True, masters, zone_changed])
-						elif not zone_obj['type'].lower() == 'slave':
-							real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
+						#	print('EXPTION')
+						#	pass
+					#if zone:
+					if zone_obj['type'].lower() == 'slave':
+						masters = list(zone_obj.get('masters', None))
+						masters.reverse()
+						slaves.append([zone_name, zone, zone_obj['type'], zone_changed, True, masters])
+					else:
+						real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
 				elif zone_obj['type'].lower() == 'slave' and zone_obj.get('masters', None):
 					masters = list(zone_obj['masters'])
 					masters.reverse()
-					slaves.append([zone_name, zone_obj['type'], False, masters, zone_changed])
+					slaves.append([zone_name, None, zone_obj['type'], zone_changed, False, masters])
 
 	for z in real_zones:
 		if z[0].lower().endswith('in-addr.arpa'):
@@ -81,15 +82,19 @@ def unrelativize(zone_name, name):
 	else:
 		return str(name)+'.'+zone_name+'.'
 
+def zone_to_text(zone):
+	after_tmp = tempfile.TemporaryFile(mode='w+t')
+	zone.to_file(after_tmp)
+	after_tmp.seek(0)
+	after = after_tmp.read()
+	after_tmp.close()
+	return after
+
 def zone_file_diff(before_path, after_obj):
 	bfile = open(before_path, 'r')
 	before = bfile.read()
 	bfile.close()
-	after_tmp = tempfile.TemporaryFile(mode='w+t')
-	after_obj.to_file(after_tmp)
-	after.seek(0)
-	after = after.read()
-	after_tmp.close()
+	after = zone_to_text(after_obj)
 	return difflib.unified_diff(before.split("\n"), after.split("\n"))
 
 def get_bind_stats():
@@ -213,10 +218,11 @@ def index():
 	notifications = [] # from logs?
 	return render_template('dashboard.html', domains=domains, slaves=slaves, reverses=reverses, unsaved=unsaved, notifications=notifications, page='dashboard')
 
-@app.route('/domain/<string:domain_name>')
-@app.route('/reverse/<string:reverse_name>')
+@app.route('/domain/<string:domain_name>', methods=['GET'])
+@app.route('/reverse/<string:reverse_name>', methods=['GET'])
+@app.route('/slave/<string:slave_name>', methods=['GET'])
 @login_required
-def get_records(domain_name=None, reverse_name=None):
+def get_records(domain_name=None, reverse_name=None, slave_name=None):
 	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
 	notifications = [] # from logs?
 	inspect_thing = None
@@ -230,12 +236,18 @@ def get_records(domain_name=None, reverse_name=None):
 			if r[0] == reverse_name:
 				page = 'zone/reverse/'+reverse_name
 				inspect_thing = r
+	elif slave_name:
+		for s in slaves:
+			if s[0] == slave_name and s[5]:
+				page = 'zone/slaves'
+				inspect_thing = s
+
 	else:
 		flash('Invalid request, zone name is required.')
 		return redirect(url_for('index'))
 
 	if inspect_thing:
-		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page)
+		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page, z2t=zone_to_text(inspect_thing[1]), now=str(datetime.datetime.utcnow())+' UTC')
 	else:
 		flash('Invalid request, zone name/zone is bad.')
 		return redirect(url_for('index'))
@@ -244,7 +256,7 @@ def get_records(domain_name=None, reverse_name=None):
 @login_required
 def slaves():
 	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
-	return render_template('slaves.html', slaves=slaves, page='zone/slaves')
+	return render_template('slaves.html', domains=domains, reverses=reverses, slaves=slaves, page='zone/slaves')
 
 @app.route('/new_zone/<string:zone_type>', methods=['GET'])
 @login_required

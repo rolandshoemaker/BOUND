@@ -27,48 +27,60 @@
         {% endwith %}
         <div class="row">
         	<div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                        	<i>{{inspect_zone[0]}}</i> zone
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    	<i>{{inspect_zone[0]}}</i> zone
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover" id="domain-zone">
+                            	<thead>
+                            		<th class="name">Name</th>
+                            		<th class="type">Type</th>
+                            		<th class="ttl">TTL</th>
+                            		<th class="data">Data</th>
+                            		<th class="actions">Actions</th>
+                            	</thead>
+                        		<tbody>
+                        			{% for name, node in inspect_zone[1].nodes.items() %}
+                        				{% for rdataset in node.rdatasets %}
+                        					{% for rdata in rdataset %}
+                            					<tr>
+	                            					<td class="name">{{unrelativize(inspect_zone[0], name)}}</td>
+	                            					<td id="{{rtype_to_text(rdata.rdtype)}}" class="type">{{rtype_to_text(rdata.rdtype)}}</td>
+	                            					<td class="ttl">{{rdataset.ttl}}</td>
+	                            					{% if len(str(rdata)) > 80 %}
+	                            						<td class="data">{{str(rdata)[0:80]+'...'}}</td>
+	                            					{% else %}
+	                            						<td class="data">{{str(rdata)}}</td>
+	                            					{% endif %}
+	                            					<td class="actions">
+	                            						{% if rtype_to_text(rdata.rdtype) in ['A', 'AAAA'] %}
+	                            							<i class="fa fa-upload" title="Generate Reverse Record"></i>
+	                            						{% endif %}
+	                            						<i class="fa fa-pencil" title="Edit"></i> 
+	                            						<i class="fa fa-exclamation-circle" title="Delete"></i>
+	                            					</td>
+                            					</tr>
+                        					{% endfor %}
+                        				{% endfor %}
+                        			{% endfor %}
+                        		</tbody>
+                            </table>
                         </div>
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover" id="domain-zone">
-                                	<thead>
-                                		<th class="name">Name</th>
-                                		<th class="type">Type</th>
-                                		<th class="ttl">TTL</th>
-                                		<th class="data">Data</th>
-                                		<th class="actions">Actions</th>
-                                	</thead>
-                            		<tbody>
-                            			{% for name, node in inspect_zone[1].nodes.items() %}
-                            				{% for rdataset in node.rdatasets %}
-                            					{% for rdata in rdataset %}
-	                            					<tr>
-		                            					<td class="name">{{unrelativize(inspect_zone[0], name)}}</td>
-		                            					<td id="{{rtype_to_text(rdata.rdtype)}}" class="type">{{rtype_to_text(rdata.rdtype)}}</td>
-		                            					<td class="ttl">{{rdataset.ttl}}</td>
-		                            					{% if len(str(rdata)) > 80 %}
-		                            						<td class="data">{{str(rdata)[0:80]+'...'}}</td>
-		                            					{% else %}
-		                            						<td class="data">{{str(rdata)}}</td>
-		                            					{% endif %}
-		                            					<td class="actions">
-		                            						{% if rtype_to_text(rdata.rdtype) in ['A', 'AAAA'] %}
-		                            							<i class="fa fa-upload" title="Generate Reverse Record"></i>
-		                            						{% endif %}
-		                            						<i class="fa fa-pencil" title="Edit"></i> 
-		                            						<i class="fa fa-exclamation-circle" title="Delete"></i>
-		                            					</td>
-	                            					</tr>
-                            					{% endfor %}
-                            				{% endfor %}
-                            			{% endfor %}
-                            		</tbody>
-                                </table>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Raw zone
+                    </div>
+                    <div class="panel-body">
+                        <pre><code class="zone">; db.{{inspect_zone[0]}} raw zone file, generated at {{now}}
+{{z2t}}</code></pre>
                     </div>
                 </div>
             </div>

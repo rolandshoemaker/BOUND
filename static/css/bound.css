@@ -159,3 +159,19 @@ td i.fa-upload {
 td.slave_type, th.cached, td.cached {
 	text-align: center;
 }
+
+td#mem i {
+	color: orange;
+}
+
+td#disk i {
+	color: green;
+}
+
+code.zone {
+	padding: 2px 4px;
+	font-size: 90%;
+	color: #c7254e;
+	background-color: #f9f2f4;
+	border-radius: 4px;
+}
