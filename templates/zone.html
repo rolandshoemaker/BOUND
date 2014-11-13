@@ -39,14 +39,16 @@
                             		<th class="type">Type</th>
                             		<th class="ttl">TTL</th>
                             		<th class="data">Data</th>
-                            		<th class="actions">Actions</th>
+                                    {% if not page.startswith('zone/slave') %}
+                            		  <th class="actions">Actions</th>
+                                    {% endif %}
                             	</thead>
                         		<tbody>
                         			{% for name, node in inspect_zone[1].nodes.items() %}
                         				{% for rdataset in node.rdatasets %}
                         					{% for rdata in rdataset %}
                             					<tr>
-	                            					<td class="name">{{unrelativize(inspect_zone[0], name)}}</td>
+	                            					<td class="name">{{name}}</td>
 	                            					<td id="{{rtype_to_text(rdata.rdtype)}}" class="type">{{rtype_to_text(rdata.rdtype)}}</td>
 	                            					<td class="ttl">{{rdataset.ttl}}</td>
 	                            					{% if len(str(rdata)) > 80 %}
@@ -54,13 +56,17 @@
 	                            					{% else %}
 	                            						<td class="data">{{str(rdata)}}</td>
 	                            					{% endif %}
-	                            					<td class="actions">
-	                            						{% if rtype_to_text(rdata.rdtype) in ['A', 'AAAA'] %}
-	                            							<i class="fa fa-upload" title="Generate Reverse Record"></i>
-	                            						{% endif %}
-	                            						<i class="fa fa-pencil" title="Edit"></i> 
-	                            						<i class="fa fa-exclamation-circle" title="Delete"></i>
-	                            					</td>
+                                                    {% if not page.startswith('zone/slave') %}
+    	                            					<td class="actions">
+    	                            						{% if rtype_to_text(rdata.rdtype) in ['A', 'AAAA'] %}
+    	                            							<i class="fa fa-upload" title="Generate Reverse Record"></i>
+    	                            						{% endif %}
+    	                            						<i class="fa fa-pencil" title="Edit"></i> 
+                                                            {% if not rtype_to_text(rdata.rdtype) == 'SOA' %}
+    	                            						    <i class="fa fa-exclamation-circle" title="Delete"></i>
+                                                            {% endif %}
+    	                            					</td>
+                                                    {% endif %}
                             					</tr>
                         					{% endfor %}
                         				{% endfor %}
@@ -79,7 +85,7 @@
                         Raw zone
                     </div>
                     <div class="panel-body">
-                        <pre><code class="zone">; db.{{inspect_zone[0]}} raw zone file, generated at {{now}}
+                        <pre><code class="zone">; raw zone file for {{inspect_zone[0]}}, generated at {{now}}
 {{z2t}}</code></pre>
                     </div>
                 </div>

@@ -49,13 +49,18 @@ def get_local_zones(confFiles):
 					#zone_changed = True
 					#unsaved = True
 					#else:
-						#try:
-					zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name)
-						#except:
-							# do something
-						#	print('EXPTION')
-						#	pass
-					#if zone:
+					try:
+						zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name, relativize=config.relativize_zones)
+					# should do something with these eventually
+					except BadZone:
+						pass
+					except NoSOA:
+						pass
+					except NoNS:
+						pass
+					except UnknownOrigin:
+						pass
+
 					if zone_obj['type'].lower() == 'slave':
 						masters = list(zone_obj.get('masters', None))
 						masters.reverse()
@@ -74,15 +79,6 @@ def get_local_zones(confFiles):
 			domains.append(z)
 
 	return domains, reverses, slaves, unsaved
-
-def unrelativize(zone_name, name):
-	if not config.relativize_zones:
-		if str(name) == "@":
-			return zone_name+'.'
-		else:
-			return str(name)+'.'+zone_name+'.'
-	else:
-		return name
 
 def zone_to_text(zone):
 	after_tmp = tempfile.TemporaryFile(mode='w+t')
@@ -249,7 +245,7 @@ def get_records(domain_name=None, reverse_name=None, slave_name=None):
 		return redirect(url_for('index'))
 
 	if inspect_thing:
-		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, unrelativize=unrelativize, str=str, len=len, page=page, z2t=zone_to_text(inspect_thing[1]), now=str(datetime.datetime.utcnow())+' UTC')
+		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, str=str, len=len, page=page, z2t=zone_to_text(inspect_thing[1]), now=str(datetime.datetime.utcnow())+' UTC')
 	else:
 		flash('Invalid request, zone name/zone is bad.')
 		return redirect(url_for('index'))

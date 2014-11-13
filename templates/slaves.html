@@ -33,7 +33,7 @@
                         </div>
                         <div class="panel-body">
                             <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave zone</button><br/>
-                            should add a cache legend n stuff...<br/><br/>
+                            <i class="fa fa-hdd-o fa-fw" style="color:green;"></i> Cached on disk<br/><i class="fa fa-database fa-fw" style="color:orange;"></i> Cached in memory<br/><br/>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="slaves">
                                 	<thead>
@@ -47,7 +47,13 @@
                             			{% for name, zone, zone_type, zone_changed, cached, masters in slaves %}
                         					<tr>
                             					<td class="name">{{name}}</td>
-                            					<td class="slave_type">{{zone_type.title()}}</td>
+                            					<td class="slave_type">
+                                                    {% if name.endswith('.in-addr.arpa') %}
+                                                        Reverse
+                                                    {% else %}
+                                                        Domain
+                                                    {% endif %}
+                                                </td>
                                                     {% if cached %}
                                                         <td class="cached" id="disk">
                                                             <a href="/slave/{{name}}" title="Cached on disk, click to view records"><i class="fa fa-hdd-o fa-fw"></i></a>

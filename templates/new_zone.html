@@ -39,39 +39,13 @@
                                 {% elif zone_type == 'reverse' %}
                                     <div class="form-group">
                                         <label>Reverse prefix</label>
-                                        <input class="form-control" name="reverse_name" placeholder="2001:470:c0ff:ee::/64 or 10.10.1.0/24">
+                                        <input class="form-control" name="reverse_name" placeholder="144-28.15.31.172.in-addr.arpa">
                                     </div>
                                     <div class="form-group">
                                             <label>Reverse prefix style (<i>Only the Standard style is IPv6 compatible</i>)</label>
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="reverse_type" id="optionsRadios3" value="Standard" checked>Standard
-                                                </label>
-                                                <i id="reverse-help" class="fa fa-question fa-fw" data-toggle="modal" data-target="#StandardModal"></i>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="StandardModal" tabindex="-1" role="dialog" aria-labelledby="StandardLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                <h4 class="modal-title" id="StandardLabel">Standard hints</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                uuuuuuuuuuum, tbh i'm not 100% sure what standard notation is. :<
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                            </div>
-                                                        </div>
-                                                        <!-- /.modal-content -->
-                                                    </div>
-                                                    <!-- /.modal-dialog -->
-                                                </div>
-                                                <!-- /.modal -->
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="reverse_type" id="optionsRadios1" value="RFC4183">RFC4183
+                                                    <input type="radio" name="reverse_type" id="optionsRadios1" value="RFC4183" checked>RFC4183
                                                 </label>
                                                 <i id="reverse-help" class="fa fa-question fa-fw" data-toggle="modal" data-target="#RFC4183Modal"></i>
                                                 <!-- Modal -->
@@ -138,6 +112,32 @@
                                                             </div>
                                                             <div class="modal-body">
                                                                 DeGroot is used to delegate the rDNS for a CIDR netblock (typically a /24). If you were allocated <code>172.31.15.144/28</code> your prefix would be <code>subnet144.15.31.172.in-addr.arpa</code>.
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.modal-content -->
+                                                    </div>
+                                                    <!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- /.modal -->
+                                            </div>
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="reverse_type" id="optionsRadios3" value="Standard">Standard
+                                                </label>
+                                                <i id="reverse-help" class="fa fa-question fa-fw" data-toggle="modal" data-target="#StandardModal"></i>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="StandardModal" tabindex="-1" role="dialog" aria-labelledby="StandardLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="StandardLabel">Standard hints</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Standard notation is reserved for allocations that fall on octet boundaries. 
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
