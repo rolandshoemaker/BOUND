@@ -76,15 +76,17 @@ def get_local_zones(confFiles):
 	return domains, reverses, slaves, unsaved
 
 def unrelativize(zone_name, name):
-	# make this a toggle option in settings?
-	if str(name) == "@":
-		return zone_name+'.'
+	if not config.relativize_zones:
+		if str(name) == "@":
+			return zone_name+'.'
+		else:
+			return str(name)+'.'+zone_name+'.'
 	else:
-		return str(name)+'.'+zone_name+'.'
+		return name
 
 def zone_to_text(zone):
 	after_tmp = tempfile.TemporaryFile(mode='w+t')
-	zone.to_file(after_tmp)
+	zone.to_file(after_tmp, sorted=config.dnssec_order, relativize=config.relativize_zones)
 	after_tmp.seek(0)
 	after = after_tmp.read()
 	after_tmp.close()

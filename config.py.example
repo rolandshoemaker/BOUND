@@ -1,17 +1,25 @@
+##################
+# BOUND settings #
+##################
+host = '127.0.0.1'
+port = 80
+user_token_store = 'sqlite:///tmp.db' # non-persistent
+default_admin_password = 'admin'
+
 #################################
 # BIND zone conf file locations #
 #################################
-host = '192.168.1.8'
-bind_zone_confs = ['/etc/bind/named.conf.local']
+bind_zone_confs = ['test.conf.local']
 
 ######################
 # Zone style options #
 ######################
-relativize_zones = True
+relativize_zones = False
+dnssec_order = True
 
 ###########################
 # BOUND optional sections #
 ###########################
 show_stats = True
 check_bind_bin = 'bin/check_bind.sh'
-check_bind_xtra = ['-V', '9.5']
+check_bind_xtra = ['-V', '9.5'] # check seems to work for >9.5 so w/e
