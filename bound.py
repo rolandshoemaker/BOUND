@@ -27,10 +27,12 @@ app.config['SECRET_KEY'] = str(uuid.uuid4())
 
 def get_local_zones(confFiles):
 	"""Return list of quads containing zone name, dnspython zone object, zone type (master/slave), and whether user has changed the zone for domains, reverses, and slaves."""
-	unsaved = bool()
 	slaves = []
 	reverses = []
 	domains = []
+	changed = predis.get(current_user.name+":zones")
+	if changed:
+		return changed['domains'], changed['reverses'], changed['slaves'], True
 	for confFile in confFiles:
 		with open(confFile) as input_config_file:
 			conf_string = input_config_file.read()
@@ -39,16 +41,8 @@ def get_local_zones(confFiles):
 		for zone_name, zone_obj in zones.items():
 			if zone_name.startswith('zone '):
 				zone_name = zone_name[6:-1].lower()
-				zone_changed = bool()
 				if zone_obj.get('file', None) and zone_obj.get('type', None):
 					zone = None
-					# check if zone name is in redis for user if so add it to real_zones instead, if not do as normal
-					changed = predis.get(g.user.name+zone_name)
-					#if changed:
-					#zone = changed
-					#zone_changed = True
-					#unsaved = True
-					#else:
 					try:
 						zone = dns.zone.from_file(zone_obj['file'][1:-1], zone_name, relativize=config.relativize_zones)
 					# should do something with these eventually
@@ -60,17 +54,16 @@ def get_local_zones(confFiles):
 						pass
 					except UnknownOrigin:
 						pass
-
 					if zone_obj['type'].lower() == 'slave':
 						masters = list(zone_obj.get('masters', None))
 						masters.reverse()
-						slaves.append([zone_name, zone, zone_obj['type'], zone_changed, True, masters])
+						slaves.append([zone_name, zone, zone_obj['type'], False, True, masters])
 					else:
-						real_zones.append([zone_name, zone, zone_obj['type'], zone_changed])
+						real_zones.append([zone_name, zone, zone_obj['type'], False])
 				elif zone_obj['type'].lower() == 'slave' and zone_obj.get('masters', None):
 					masters = list(zone_obj['masters'])
 					masters.reverse()
-					slaves.append([zone_name, None, zone_obj['type'], zone_changed, False, masters])
+					slaves.append([zone_name, None, zone_obj['type'], False, False, masters])
 
 	for z in real_zones:
 		if z[0].lower().endswith('in-addr.arpa'):
@@ -78,7 +71,7 @@ def get_local_zones(confFiles):
 		else:
 			domains.append(z)
 
-	return domains, reverses, slaves, unsaved
+	return domains, reverses, slaves, False
 
 def zone_to_text(zone):
 	after_tmp = tempfile.TemporaryFile(mode='w+t')
