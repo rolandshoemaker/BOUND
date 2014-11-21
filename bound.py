@@ -1,4 +1,5 @@
 import config
+from statman import stats_loop
 
 from flask import Flask, render_template, request, session, jsonify, abort, redirect, url_for, g, flash
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -7,12 +8,13 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from passlib.apps import custom_app_context as pwd_context
 
-import sys
+import sys, os
 sys.path.insert(1, 'lib/')
 sys.path.insert(1, 'lib/iscpy/') # guh such ghetto-hack to make this work with python 3...
 import pickle, iscpy, difflib, subprocess, uuid, tempfile, datetime
 import dns.zone, dns.rdatatype
 from redis import StrictRedis
+import multiprocessing
 
 ###############
 # Flask setup #
@@ -88,19 +90,11 @@ def zone_file_diff(before_path, after_obj):
 	after = zone_to_text(after_obj)
 	return difflib.unified_diff(before.split("\n"), after.split("\n"))
 
-def get_bind_stats():
-	proc = subprocess.Popen(['bash', config.check_bind_bin]+config.check_bind_xtra, stdout=subprocess.PIPE)
-	tmp = proc.stdout.read().decode('utf-8').replace('\\n', '').replace('"', '')
-	running = bool()
-	if tmp.startswith('Bind9 is running'):
-		rrd = tmp.split(' | ')[1].split(' ')
-		stuff = {}
-		for r in rrd:
-			stuff[r.split('=')[0][1:-1]] = int(r.split('=')[1])
-		stuff['running'] = True
-		return stuff
+def check_bind_running():
+	if os.path.isfile(config.bind_pid_path):
+		return True
 	else:
-		return {'running': False}
+		return False
 
 
 ###############
@@ -117,7 +111,7 @@ class PickledRedis(StrictRedis):
     def set(self, name, value, ex=None, px=None, nx=False, xx=False):
         return super(PickledRedis, self).set(name, pickle.dumps(value), ex, px, nx, xx)
 
-predis = PickledRedis()
+predis = PickledRedis(host='localhost', port=6379)
 
 ##############
 # Auth stuff #
@@ -270,31 +264,48 @@ def new_zone(zone_type):
 @login_required
 def stats_endpoint():
 	"""Return current BIND stats."""
-	return jsonify(get_bind_stats())
+	return jsonify(predis.get('bind_stats'))
 
 @app.route('/api/v1/bind_running', methods=['GET'])
 @login_required
 def running_endpoint():
 	"""Return wether BIND is running."""
-	return jsonify({'running': get_bind_stats()['running']})
+	return jsonify({'running': check_bind_running()}) # srsly needs to be a better way to do this, ill get to it later
 
 @app.route('/api/v1/users', methods=['POST', 'UPDATE', 'DELETE'])
 def api_user():
-	pass
+	if request.method == 'POST':
+		pass
+	elif request.method == 'UPDATE':
+		pass
+	elif request.method == 'DELETE':
+		pass
 
 @app.route('/api/v1/zone', methods=['POST', 'UPDATE', 'DELETE'])
 def api_zone():
-	pass
+	if request.method == 'POST':
+		pass
+	elif request.method == 'UPDATE':
+		pass
+	elif request.method == 'DELETE':
+		pass
 
 @app.route('/api/v1/record', methods=['POST', 'UPDATE', 'DELETE'])
 def api_record():
-	pass
+	if request.method == 'POST':
+		pass
+	elif request.method == 'UPDATE':
+		pass
+	elif request.method == 'DELETE':
+		pass
 
 #############
 # Dev stuff #
 #############
 
 if __name__ == '__main__':
+	if config.generate_stats:
+		stats_loop()
 	# Build DB and add admin user with default password from config.default_admin_password
 	db.create_all()
 	db.session.commit()

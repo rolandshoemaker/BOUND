@@ -32,7 +32,58 @@
                         	<i>Slave</i> zones
                         </div>
                         <div class="panel-body">
-                            <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave zone</button><br/>
+                            <button name="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#SlaveModal">New Slave zone</button><br/>
+                            <div class="modal fade" id="SlaveModal" tabindex="-1" role="dialog" aria-labelledby="SlaveLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="SlaveLabel">New Slave zone</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form>
+                                                <h1>Slave</h1>
+                                                <div class="form-group">
+                                                    <label>Zone name</label>
+                                                    <input class="form-control" name="zone_name" placeholder="example.com">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Cache</label>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="cache_type" id="optionsRadios1" value="disk" checked>Disk
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label>
+                                                            <input type="radio" name="cache_type" id="optionsRadios2" value="memory">Memory
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <label>Masters</label>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon">NS1</span>
+                                                    <input class="form-control" name="master1" placeholder="1.2.3.4">
+                                                </div>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon">NS2</span>
+                                                    <input class="form-control" name="master2" placeholder="1.2.3.5">
+                                                </div>
+                                                <div class="form-group input-group">
+                                                    <span class="input-group-addon">NS3</span>
+                                                    <input class="form-control" name="master3" placeholder="1.2.3.6">
+                                                </div>
+                                                <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add slave</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
                             <i class="fa fa-hdd-o fa-fw" style="color:green;"></i> Cached on disk (<i>click on icon to view records</i>)<br/><i class="fa fa-database fa-fw" style="color:orange;"></i> Cached in memory<br/><br/>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-hover" id="slaves">

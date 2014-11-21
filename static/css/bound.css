@@ -175,3 +175,11 @@ code.zone {
 	background-color: #f9f2f4;
 	border-radius: 4px;
 }
+
+.modal-dialog  {
+	width:75% !important;
+}
+
+span.input-group-addon {
+	cursor: default;
+}
