@@ -217,28 +217,31 @@ def get_records(domain_name=None, reverse_name=None, slave_name=None):
 	domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
 	notifications = [] # from logs?
 	inspect_thing = None
+	zone_type = None
 	if domain_name:
 		for d in domains:
 			if d[0] == domain_name:
 				page = 'zone/domain/'+domain_name
 				inspect_thing = d
+				zone_type = 'domain'
 	elif reverse_name:
 		for r in reverses:
 			if r[0] == reverse_name:
 				page = 'zone/reverse/'+reverse_name
 				inspect_thing = r
+				zone_type = 'reverse'
 	elif slave_name:
 		for s in slaves:
 			if s[0] == slave_name and s[5]:
 				page = 'zone/slaves'
 				inspect_thing = s
-
+				zone_type = 'slave'
 	else:
 		flash('Invalid request, zone name is required.')
 		return redirect(url_for('index'))
 
 	if inspect_thing:
-		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, str=str, len=len, page=page, z2t=zone_to_text(inspect_thing[1]), now=str(datetime.datetime.utcnow())+' UTC')
+		return render_template('zone.html', inspect_zone=inspect_thing, domains=domains, reverses=reverses, unsaved=unsaved, notifications=notifications, rtype_to_text=dns.rdatatype.to_text, str=str, len=len, page=page, z2t=zone_to_text(inspect_thing[1]), now=str(datetime.datetime.utcnow())+' UTC', zone_type=zone_type)
 	else:
 		flash('Invalid request, zone name/zone is bad.')
 		return redirect(url_for('index'))
@@ -253,7 +256,8 @@ def slaves():
 @login_required
 def new_zone(zone_type):
 	if zone_type in ['domain', 'reverse']:
-		return render_template('new_zone.html', zone_type=zone_type, page='zone/'+zone_type+'/new')
+		domains, reverses, slaves, unsaved = get_local_zones(config.bind_zone_confs)
+		return render_template('new_zone.html', zone_type=zone_type, page='zone/'+zone_type+'/new', domains=domains, reverses=reverses, unsaved=unsaved)
 	else:
 		flash('Invalid zone type \''+zone_type+'\'.')
 		return redirect(url_for('index'))

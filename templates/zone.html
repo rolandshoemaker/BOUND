@@ -32,8 +32,11 @@
                     	<i>{{inspect_zone[0]}}</i> zone
                     </div>
                     <div class="panel-body">
+                        {% if not zone_type == "slave" %}
+                            <button name="button" value="new_{{zone_type}}_record" class="btn btn-lg btn-success btn-block">Add record</button><br/>
+                        {% endif %}
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="domain-zone">
+                            <table class="table table-bordered table-hover" id="zone">
                             	<thead>
                             		<th class="name">Name</th>
                             		<th class="type">Type</th>
@@ -94,7 +97,7 @@
     </div>
     <script>
     $(document).ready(function() {
-        $('#domain-zone').dataTable({
+        $('#zone').dataTable({
     		"lengthMenu": [25, 50, 75, 100],
     		"bSort": false
     		// "aaSorting": [],
