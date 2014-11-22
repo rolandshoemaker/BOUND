@@ -11,43 +11,52 @@ $(function() {
     var nxrrset = [];
     series = [{
         data: [],
-        label: 'user',
+        label: 'User',
         lines: {show:true}
     },{
         data: [],
-        label: 'referral',
+        label: 'Referral',
         lines: {show:true}
     },{
         data: [],
-        label: 'nxrrset',
+        label: 'NXRRSET',
         lines: {show:true}
     },{
         data: [],
-        label: 'nxdomain',
+        label: 'NXDOMAIN',
         lines: {show:true}
     },{
         data: [],
-        label: 'recursion',
+        label: 'Recursion',
         lines: {show:true}
     },{
         data: [],
-        label: 'failure',
+        label: 'Failure',
         lines: {show:true}
     },{
         data: [],
-        label: 'duplicate',
+        label: 'Duplicate',
         lines: {show:true}
     }];
 
     chart = $.plot($(".flot-chart-content"), series, {
+        lines: {
+            lineWidth: 0.5
+        },
         grid: {
             borderWidth: 0
         },
         colors: ['#008000', '#0C64E8', '#E80C3E', '#FFA500', '#1CC8E8', '#E80C8C', '#00FF3F'],
         shadowSize: 0,
         yaxis: {tickLength:1, tickDecimals: 0, min: 0}, 
-        xaxis: {tickLength:1 , mode: "time", tickSize: [15, 'minute']},
-        legend: {position: 'nw', labelBoxBorderColor: null}
+        xaxis: {tickLength:1 , mode: "time", tickSize: [1, 'hour']},
+        legend: {position: 'nw', labelBoxBorderColor: null},
+        /*zoom: {
+            interactive: true
+        },
+        pan: {
+            interactive: true
+        }*/
     });
 
     function weird() {

@@ -33,7 +33,369 @@
                     </div>
                     <div class="panel-body">
                         {% if not zone_type == "slave" %}
-                            <button name="button" value="new_{{zone_type}}_record" class="btn btn-lg btn-success btn-block">Add record</button><br/>
+                            <button name="button" class="btn btn-lg btn-success btn-block" data-toggle="modal" data-target="#RecordModal-{{zone_type}}">Add record</button><br/>
+                            <div class="modal fade" id="RecordModal-domain" tabindex="-1" role="dialog" aria-labelledby="RecordLabel-domain" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="RecordLabel-domain">New record</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#A" data-toggle="tab" aria-expanded="true">A</a></li>
+                                                <li ><a href="#AAAA" data-toggle="tab" aria-expanded="false">AAAA</a></li>
+                                                <li ><a href="#CNAME" data-toggle="tab" aria-expanded="false">CNAME</a></li>
+                                                <li ><a href="#MX" data-toggle="tab" aria-expanded="false">MX</a></li>
+                                                <li ><a href="#NS" data-toggle="tab" aria-expanded="false">NS</a></li>
+                                                <li ><a href="#TXT" data-toggle="tab" aria-expanded="false">TXT</a></li>
+                                                <li ><a href="#SRV" data-toggle="tab" aria-expanded="false">SRV</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active in" id="A">
+                                                    <h4>A</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>IPv4 Address</label>
+                                                            <input class="form-control" name="ipv4" placeholder="1.2.3.4">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="AAAA">
+                                                    <h4>AAAA</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>IPv6 Address</label>
+                                                            <input class="form-control" name="ipv4" placeholder="2001:470:0:61::2">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="CNAME">
+                                                    <h4>CNAME</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="alias.example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Alias</label>
+                                                            <input class="form-control" name="alias_name" placeholder="example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="MX">
+                                                    <h4>MX</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="alias.example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Priority</label>
+                                                            <input class="form-control" name="priority" placeholder="10">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Exchange name</label>
+                                                            <input class="form-control" name="priority" placeholder="mail.example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="NS">
+                                                    <h4>NS</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Name server</label>
+                                                            <input class="form-control" name="ns_name" placeholder="ns1.example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="TXT">
+                                                    <h4>TXT</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Text</label>
+                                                            <input class="form-control" name="text" placeholder="Blah blah blah">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="SRV">
+                                                    <h4>SRV</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="_http._tcp.example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hours</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Priority</label>
+                                                            <input class="form-control" name="priority" placeholder="10">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Weight</label>
+                                                            <input class="form-control" name="weight" placeholder="10">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Service name</label>
+                                                            <input class="form-control" name="service" placeholder="www.example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <div class="modal fade" id="RecordModal-reverse" tabindex="-1" role="dialog" aria-labelledby="RecordLabel-reverse" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="RecordLabel-reverse">New record</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <ul class="nav nav-tabs">
+                                                <li class="active"><a href="#PTR" data-toggle="tab" aria-expanded="true">PTR</a></li>
+                                                <li ><a href="#RNS" data-toggle="tab" aria-expanded="false">NS</a></li>
+                                                <li ><a href="#RCNAME" data-toggle="tab" aria-expanded="false">CNAME</a></li>
+                                                <li ><a href="#RTXT" data-toggle="tab" aria-expanded="false">TXT</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active in" id="PTR">
+                                                    <h4>PTR</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="145.144-28.15.31.172.in-addr.arpa">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hour</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Pointer name</label>
+                                                            <input class="form-control" name="pointer_name" placeholder="example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="RCNAME">
+                                                    <h4>CNAME</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="alias.example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hour</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Alias</label>
+                                                            <input class="form-control" name="alias_name" placeholder="example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="RNS">
+                                                    <h4>NS</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hour</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Name server</label>
+                                                            <input class="form-control" name="ns_name" placeholder="ns1.example.com">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                                <div class="tab-pane" id="RTXT">
+                                                    <h4>TXT</h4>
+                                                    <form>
+                                                        <div class="form-group">
+                                                            <label>Name</label>
+                                                            <input class="form-control" name="record_name" placeholder="example.com">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>TTL</label>
+                                                            <select name="ttl" class="form-control">
+                                                                <option>24 hours</option>
+                                                                <option>12 hours</option>
+                                                                <option>8 hours</option>
+                                                                <option>4 hours</option>
+                                                                <option>2 hours</option>
+                                                                <option>1 hour</option>
+                                                                <option>15 minutes</option>
+                                                                <option>5 minutes</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Text</label>
+                                                            <input class="form-control" name="text" placeholder="Blah blah blah">
+                                                        </div>
+                                                        <button name="button" value="new_slave" class="btn btn-lg btn-success btn-block">Add A record</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
                         {% endif %}
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="zone">

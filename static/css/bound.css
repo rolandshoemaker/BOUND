@@ -21,6 +21,16 @@ a {
 	color: white !important;
 }
 
+.nav-tabs a {
+	color: black !important;
+}
+
+ul.nav-tabs a:hover { background-color: #EAEAEA !important; }
+
+.nav-tabs {
+	border: 1;
+}
+
 .panel {
 	border: 0 !important;
 	box-shadow: none !important;
